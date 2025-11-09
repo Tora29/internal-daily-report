@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
 export default function DaisyUISamplePage() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -280,10 +280,7 @@ export default function DaisyUISamplePage() {
                     これはモーダルの内容です。ここに任意のコンテンツを配置できます。
                   </p>
                   <div className="modal-action">
-                    <button
-                      className="btn"
-                      onClick={() => setModalOpen(false)}
-                    >
+                    <button className="btn" onClick={() => setModalOpen(false)}>
                       閉じる
                     </button>
                     <button
@@ -429,7 +426,11 @@ export default function DaisyUISamplePage() {
           <div className="card-body">
             <h2 className="card-title text-2xl">プログレスバー</h2>
             <div className="space-y-4">
-              <progress className="progress w-full" value="0" max="100"></progress>
+              <progress
+                className="progress w-full"
+                value="0"
+                max="100"
+              ></progress>
               <progress
                 className="progress progress-primary w-full"
                 value="25"
@@ -457,7 +458,7 @@ export default function DaisyUISamplePage() {
         {/* Footer */}
         <div className="text-center">
           <p className="text-base-content/60">
-            DaisyUI の詳細は{" "}
+            DaisyUI の詳細は{' '}
             <a
               href="https://daisyui.com/"
               target="_blank"
@@ -465,7 +466,7 @@ export default function DaisyUISamplePage() {
               className="link link-primary"
             >
               公式ドキュメント
-            </a>{" "}
+            </a>{' '}
             をご覧ください
           </p>
         </div>
