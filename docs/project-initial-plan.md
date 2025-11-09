@@ -1,19 +1,22 @@
-# プロジェクト初期設計 - サーバーレス構成でAWSの基礎を学ぶ（全員AWS初心者版）
+# プロジェクト初期設計 - サーバーレス構成でAWSの基礎を学ぶ
 
 ## 概要
-5人チーム（初学者〜シニア混成、**全員AWS初心者**）で日報作成アプリを開発。
-**サーバーレス構成（S3/CloudFront/Lambda/API Gateway）**を採用し、AWSの基礎をしっかり学ぶ。
+
+5人チーム（初学者〜シニア混成、**全員AWS初心者**）で日報作成アプリを開発。\
+サーバーレス構成（S3/CloudFront/Lambda/API Gateway）を採用し、AWSの基礎をしっかり学ぶ。
 
 ## 背景・目的
 
 ### チーム構成
-- **あなた**: ミドル〜シニア、フロントエンド、バックエンド、インフラ、アーキテクトにそこそこ精通
+
+- **とら**: ミドル〜シニア、フロントエンド、バックエンド、インフラ、アーキテクトにそこそこ精通
 - **もけ**: 初学者、エンジニア1年目、AWSクラウドプラクティショナー、応用情報所持
 - **きゅー**: ジュニア、エンジニア1年目だがお作法の知見あり、AWSクラウドプラクティショナー所持
 - **やま**: ジュニア、インフラ系、オンプレメイン、CCNA所持
 - **きこ**: シニア、インフラ系、オンプレメイン、PM歴長め、応用情報、SC所持
 
 ### プロジェクト方針
+
 - アジャイル開発
 - メンバー全員がAWS学習を希望
 - **重要**: AWSの基礎をしっかり学ぶ（ブラックボックスを避ける）
@@ -27,8 +30,8 @@
 **決定**: **S3/CloudFront/Lambda/API Gateway**
 
 **理由**:
+
 - 初学者にAWSの基礎（S3, CloudFront, Lambda, IAM等）をしっかり学べる
-- あなたの知見（S3/CloudFront/Lambda/API Gateway）を活かせる
 - コストが最安（従量課金、Free Tierフル活用）
 - 実務で使えるスキルが身につく
 - ブラックボックスが少なく、トラブル時に原因特定しやすい
@@ -40,9 +43,22 @@
 - Prismaで型安全、マイグレーション管理が楽
 - Free Tier: 750時間/月（1インスタンス分）
 
+**環境構成**:
+- ローカル開発: Docker PostgreSQL + LocalStack
+- 本番環境（AWS）: RDS PostgreSQL
+
+**Lambda + RDS接続設定**:
+- Prisma接続プール最適化（connection_limit = 1）
+- Lambda同時実行数制限（reservedConcurrentExecutions: 10）
+- CloudWatchで接続数監視（アラート設定）
+
+**備考**:
+将来的にトラフィックが大幅に増加し接続エラーが頻発する場合は、RDS Proxyの導入を検討（追加コスト: 月$10-15程度）。ただし現在の想定ユーザー数では不要。
+
 ### 3. 認証: AWS Cognito
 
 **理由**:
+
 - Google OAuth対応
 - Free Tier: 50,000 MAU
 - CDKで構築、設定を理解しながら学べる
@@ -50,6 +66,7 @@
 ### 4. IaC: AWS CDK (TypeScript)
 
 **理由**:
+
 - TypeScriptで記述 → チーム全員読める
 - AWS公式、コード補完・型チェック
 - Next.jsプロジェクトと統合しやすい
@@ -59,6 +76,7 @@
 **決定**: **LocalStack（日常開発）+ 実AWS（統合テスト・本番）**
 
 **理由**:
+
 - **履歴書・転職で有利**: LocalStack経験は実務で評価される
 - **実務スキル**: 多くの企業がLocalStackを使用
 - **コスト**: 完全無料
@@ -68,6 +86,7 @@
 ### 6. API設計: Lambda関数（TypeScript）
 
 **理由**:
+
 - Next.js SSGのため、Lambda関数で実装
 - Prismaでデータアクセス、zodでバリデーション
 
@@ -477,6 +496,7 @@ LocalStackと実AWSの差異が出た場合:
 ### 推奨プロジェクト管理ツール
 
 **GitHub Projects**（推奨）
+
 - 理由: 無料、コードと統合、学習コスト低
 - 機能: イシュー管理、カンバンボード、マイルストーン
 - テンプレート: Automated kanban with reviews
@@ -571,6 +591,7 @@ LocalStackと実AWSの差異が出た場合:
 ## 参考リソース
 
 ### LocalStack
+
 - [LocalStack公式ドキュメント](https://docs.localstack.cloud/)
 - [LocalStack GitHub](https://github.com/localstack/localstack)
 - [LocalStack チュートリアル](https://docs.localstack.cloud/tutorials/)
@@ -580,11 +601,13 @@ LocalStackと実AWSの差異が出た場合:
 ### AWS公式
 
 #### サーバーレス
+
 - [AWS Lambda ドキュメント](https://docs.aws.amazon.com/lambda/)
 - [Amazon API Gateway ドキュメント](https://docs.aws.amazon.com/apigateway/)
 - [Serverless Land](https://serverlessland.com/)（パターン集）
 
 #### インフラ・その他
+
 - [AWS CDK ドキュメント](https://docs.aws.amazon.com/cdk/)
 - [AWS CDK Workshop](https://cdkworkshop.com/)（TypeScript版推奨）
 - [Amazon S3 ドキュメント](https://docs.aws.amazon.com/s3/)
@@ -595,22 +618,27 @@ LocalStackと実AWSの差異が出た場合:
 - [AWS re:Post（コミュニティ）](https://repost.aws/)
 
 ### Next.js
+
 - [Next.js 公式ドキュメント](https://nextjs.org/docs)
 - [Next.js Static Export](https://nextjs.org/docs/app/building-your-application/deploying/static-exports)
 
 ### データベース・ORM
+
 - [Prisma ドキュメント](https://www.prisma.io/docs)
 - [Prisma + PostgreSQL ガイド](https://www.prisma.io/docs/orm/overview/databases/postgresql)
 - [Prisma + AWS Lambda](https://www.prisma.io/docs/orm/more/deployment/serverless/deploy-to-aws-lambda)
 
 ### UI
+
 - [daisyUI](https://daisyui.com/)
 - [TailwindCSS](https://tailwindcss.com/)
 
 ### テスト
+
 - [Vitest](https://vitest.dev/)
 - [Playwright](https://playwright.dev/)
 
 ### その他
+
 - [zod（バリデーション）](https://zod.dev/)
 - [GitHub Actions ドキュメント](https://docs.github.com/actions)
