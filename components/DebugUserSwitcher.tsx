@@ -16,18 +16,18 @@ type User = {
 // ===================================
 
 // --- Team A ---
-const MOCK_USERS: User[] = [
-  { id: 'tora', name: 'とら', role: 'admin' },
-  { id: 'kyu', name: 'きゅー', role: 'member' },
-  { id: 'shun', name: 'しゅん', role: 'member' },
-];
+// const MOCK_USERS: User[] = [
+//   { id: 'tora', name: 'とら', role: 'admin' },
+//   { id: 'kyu', name: 'きゅー', role: 'member' },
+//   { id: 'shun', name: 'しゅん', role: 'member' },
+// ];
 
 // --- Team B ---
-// const MOCK_USERS: User[] = [
-//   { id: 'ika', name: 'いか', role: 'admin' },
-//   { id: 'moke', name: 'もけ', role: 'member' },
-//   { id: 'kiko', name: 'きこ', role: 'member' },
-// ];
+const MOCK_USERS: User[] = [
+  { id: 'ika', name: 'いか', role: 'admin' },
+  { id: 'moke', name: 'もけ', role: 'member' },
+  { id: 'kiko', name: 'きこ', role: 'member' },
+];
 
 type DebugUserSwitcherProps = {
   currentUserId?: string | null;
