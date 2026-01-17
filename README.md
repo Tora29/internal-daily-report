@@ -1,262 +1,305 @@
-# internal-daily-report
+# Daily Report - ハッカソン スターターキット
 
-Discord サーバーでの活動を日報で報告するためのシステムです。
+日報登録システムのハッカソン用ベースリポジトリです。
 
-## ブランチ戦略（GitHub Flow）
+## チーム構成
 
-シンプルなGitHub Flowを採用します。
+| チーム | メンバー                    | ブランチ | Supabase     |
+| ------ | --------------------------- | -------- | ------------ |
+| Team A | とら(admin), きゅー, しゅん | `team-a` | nippo-team-a |
+| Team B | いか(admin), もけ, きこ     | `team-b` | nippo-team-b |
 
-```
-main         → 本番環境（自動デプロイ）
-  ↑
-feature/*    → 機能開発ブランチ
-```
+## 技術スタック
 
-### ブランチ運用ルール
+- **Frontend**: Next.js 16 (App Router) + React 19
+- **Language**: TypeScript
+- **Styling**: TailwindCSS 4 + daisyUI 5
+- **Database**: Supabase (PostgreSQL)
+- **ORM**: Prisma 6
+- **Deploy**: Vercel
 
-- **main**: 本番環境、保護ブランチ、PRのみマージ可
-- **feature/\***: 個別機能開発、mainからブランチを切る
-  - 例: `feature/auth-cognito`, `feature/daily-report-crud`
+---
 
-### 開発フロー
+## セットアップ手順
 
-1. **ブランチ作成**: `git checkout -b feature/xxx main`
-2. **LocalStackで開発・テスト**: ローカル環境で開発
-3. **PR作成**: `feature/xxx → main`
-4. **コードレビュー**: チームメンバー同士のレビュー後、テックリードにレビュー依頼
-5. **マージ**: main にマージ → 本番環境に自動デプロイ
-
-### 実AWS環境での統合テスト（必要時）
-
-LocalStackと実AWSの差異確認が必要な場合:
-
-- GitHub Actionsのワークフローを手動実行（`workflow_dispatch`）
-- PRブランチを指定して実AWS環境にデプロイ・テスト
-- 問題なければmainにマージ
-
-### コミットメッセージ規約
-
-[Conventional Commits](https://www.conventionalcommits.org/) を推奨:
-
-```
-feat: 新機能追加
-fix: バグ修正
-docs: ドキュメント変更
-refactor: リファクタリング
-test: テスト追加・修正
-chore: ビルド・設定変更
-```
-
-例:
-
-```
-feat: add Google OAuth with Cognito
-fix: resolve Lambda cold start issue
-docs: update setup guide for LocalStack
-```
-
-## 環境セットアップ
-
-### 前提条件
-
-以下をインストールしてください:
-
-- Node.js 20.x (推奨: [nvm](https://github.com/nvm-sh/nvm)使用)
-- Docker & Docker Compose
-- AWS CLI v2
-- [awslocal CLI](https://github.com/localstack/awscli-local) (LocalStack用)
+### 1. ブランチを切る
 
 ```bash
-# Node.js 20 インストール（nvmの場合）
-nvm install 20
-nvm use 20
-
-# AWS CLI インストール確認
-aws --version
-
-# awslocal インストール
-pip install awscli-local
-```
-
-### 初回セットアップ
-
-```bash
-# 1. リポジトリをクローン
-git clone https://github.com/your-org/internal-daily-report.git
+# リポジトリをクローン
+git clone https://github.com/Tora29/internal-daily-report.git
 cd internal-daily-report
 
-# 2. 依存関係インストール
+# 自分のチームのブランチを作成
+# Team A の場合
+git checkout -b team-a
+
+# Team B の場合
+git checkout -b team-b
+```
+
+### 2. 依存関係をインストール
+
+```bash
 npm install
+```
 
-# 3. 環境変数設定
-cp .env.local .env
-# .env を編集して必要な値を設定（個人用の設定）
+### 3. チーム設定を変更
 
-# 4. LocalStack + PostgreSQL 起動
-docker-compose up -d
+**自分のチームに合わせて、以下の2ファイルを編集してください。**
 
-# 5. データベースマイグレーション
-npm run db:migrate
+#### `prisma/seed.ts`
 
-# 6. 開発サーバー起動
+```typescript
+// Team A の場合: そのまま
+// Team B の場合: Team A をコメントアウトし、Team B のコメントを外す
+
+// --- Team A ---
+// const users = [
+//   { id: 'tora', name: 'とら', role: 'admin' },
+//   ...
+// ];
+
+// --- Team B ---
+const users = [
+  { id: 'ika', name: 'いか', role: 'admin' },
+  { id: 'moke', name: 'もけ', role: 'member' },
+  { id: 'kiko', name: 'きこ', role: 'member' },
+];
+```
+
+#### `components/DebugUserSwitcher.tsx`
+
+同様に Team A / Team B のコメントを切り替え
+
+### 4. 環境変数を設定
+
+```bash
+cp .env.example .env
+```
+
+`.env` を編集して、自分のチームの Supabase 接続情報を設定:
+
+```bash
+# Team A
+DATABASE_URL="postgresql://postgres.uhmzoirgajuhrjarvdla:[PASSWORD]@aws-1-ap-south-1.pooler.supabase.com:6543/postgres?pgbouncer=true"
+DIRECT_URL="postgresql://postgres.uhmzoirgajuhrjarvdla:[PASSWORD]@aws-1-ap-south-1.pooler.supabase.com:5432/postgres?pgbouncer=true"
+
+# Team B
+DATABASE_URL="postgresql://postgres.qwyxirhdbdotqqylrojd:[PASSWORD]@aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true"
+DIRECT_URL="postgresql://postgres.qwyxirhdbdotqqylrojd:[PASSWORD]@aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres?pgbouncer=true"
+```
+
+> **パスワードはチームリーダーに確認してください**
+
+### 5. データベース初期化
+
+```bash
+npm run db:reset
+```
+
+### 6. 開発サーバー起動
+
+```bash
 npm run dev
 ```
 
-### LocalStack確認
+http://localhost:3000 にアクセス
 
-```bash
-# LocalStackの起動確認
-docker-compose ps
+---
 
-# LocalStack S3バケット作成例
-awslocal s3 mb s3://test-bucket
-awslocal s3 ls
+## 開発フロー
 
-# LocalStack Lambda一覧確認例
-awslocal lambda list-functions
+### ブランチ戦略
+
+```
+main (ベース)
+  │
+  ├── team-a (Team A 開発)
+  │     └── feature/xxx (機能ブランチ)
+  │
+  └── team-b (Team B 開発)
+        └── feature/xxx (機能ブランチ)
 ```
 
-## 開発コマンド
-
-### ローカル開発
+### 機能開発の流れ
 
 ```bash
-# 開発サーバー起動（ホットリロード対応）
+# 1. 機能ブランチを作成
+git checkout -b feature/日報一覧
+
+# 2. 開発・コミット
+git add .
+git commit -m "feat: 日報一覧ページを追加"
+
+# 3. チームブランチにマージ
+git checkout team-a
+git merge feature/日報一覧
+git push origin team-a
+```
+
+---
+
+## 認証システム（Mock Auth）
+
+本番の認証は実装せず、**なりきり認証**を採用しています。
+
+### 使い方
+
+画面左下のデバッグUIでユーザーを切り替えられます。
+
+### Server Actions での取得
+
+```typescript
+// app/actions/report.ts
+'use server';
+
+import { getCurrentUser } from '@/lib/auth';
+
+export async function createReport(content: string) {
+  const user = await getCurrentUser();
+  if (!user) throw new Error('ログインしてください');
+
+  // user.id, user.name, user.role が使える
+  // ...
+}
+```
+
+### Server Component での取得
+
+```typescript
+// app/reports/page.tsx
+import { getCurrentUser } from '@/lib/auth';
+
+export default async function ReportsPage() {
+  const user = await getCurrentUser();
+
+  return <div>こんにちは、{user?.name}さん</div>;
+}
+```
+
+---
+
+## 便利コマンド
+
+```bash
+# 開発サーバー
 npm run dev
 
-# アクセス: http://localhost:3000
-
-# LocalStack + PostgreSQL 起動
-docker-compose up -d
-
-# LocalStack + PostgreSQL 停止
-docker-compose down
-
-# LocalStack + PostgreSQL ログ確認
-docker-compose logs -f
-```
-
-### ビルド
-
-```bash
-# Next.js ビルド（SSG出力 → out/）
+# ビルド
 npm run build
 
-# 本番モード起動
-npm start
-```
-
-### コード品質チェック
-
-```bash
 # Lint チェック
 npm run lint
 
-# コードフォーマット
+# フォーマット
 npm run format
 
-# フォーマットチェック（CI用）
-npm run format:check
-
-# テスト実行
-npm test
-
-# テスト実行（UI付き）
-npm run test:ui
-
-# テスト実行（CI用）
+# テスト
 npm run test:run
+
+# DB リセット（テーブル再作成 + シード）
+npm run db:reset
+
+# DB シードのみ
+npm run db:seed
+
+# Prisma Studio（DB GUI）
+npm run db:studio
 ```
 
-### データベース
+---
+
+## データベース
+
+### スキーマ
+
+```prisma
+model User {
+  id        String   @id
+  name      String
+  role      String   @default("member")
+  reports   Report[]
+}
+
+model Report {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(...)
+  date      DateTime
+  content   String
+}
+```
+
+### Prisma の使い方
+
+```typescript
+import { prisma } from '@/lib/prisma';
+
+// 日報一覧取得
+const reports = await prisma.report.findMany({
+  include: { user: true },
+  orderBy: { date: 'desc' },
+});
+
+// 日報作成
+await prisma.report.create({
+  data: {
+    userId: user.id,
+    content: '今日の日報...',
+  },
+});
+```
+
+---
+
+## ディレクトリ構成
+
+```
+/
+├── app/                    # Next.js App Router
+│   ├── actions/           # Server Actions
+│   │   └── auth.ts        # loginAs()
+│   ├── layout.tsx         # ルートレイアウト
+│   └── page.tsx           # トップページ
+├── components/            # UIコンポーネント
+│   └── DebugUserSwitcher.tsx
+├── lib/                   # ユーティリティ
+│   ├── auth.ts            # getCurrentUser()
+│   └── prisma.ts          # Prisma Client
+├── prisma/
+│   ├── schema.prisma      # DBスキーマ
+│   └── seed.ts            # シードデータ
+└── .env.example           # 環境変数テンプレート
+```
+
+---
+
+## トラブルシューティング
+
+### DB接続エラー
+
+```
+Can't reach database server
+```
+
+→ `.env` の `DATABASE_URL` と `DIRECT_URL` を確認
+
+### 認証エラー
+
+```
+Authentication failed
+```
+
+→ パスワードが正しいか確認（チームリーダーに聞く）
+
+### キャッシュの問題
 
 ```bash
-# Prismaマイグレーション作成
-npm run db:migrate
-
-# Prisma Studio起動（DB GUI）
-npm run db:studio
-
-# Prismaスキーマ再生成
-npm run db:generate
+rm -rf .next
+npm run dev
 ```
 
-## デプロイフロー
-
-### 自動デプロイ（GitHub Actions）
-
-```
-feature/* → main にマージ
-  ↓
-GitHub Actions 自動実行
-  ├─ Next.js ビルド → S3 アップロード
-  ├─ Lambda関数 ビルド → デプロイ
-  └─ CloudFront キャッシュクリア
-  ↓
-本番環境に反映
-```
-
-### 手動デプロイ（実AWS統合テスト用）
-
-GitHub Actionsのワークフロー画面から `workflow_dispatch` で手動実行可能:
-
-1. GitHubリポジトリの **Actions** タブを開く
-2. 対象ワークフローを選択
-3. **Run workflow** → ブランチ選択 → 実行
-
-## プロジェクト管理
-
-### タスク管理
-
-- **GitHub Projects** を使用してタスク管理
-- イシュー駆動開発を推奨
-
-## AWSアーキテクチャ
-
-```
-ユーザー
-  │
-  ↓
-CloudFront (CDN)
-  │
-  ├─→ S3 (静的ファイル: HTML, CSS, JS)
-  │     ├─ Next.js SSG出力（npm run build → out/）
-  │     └─ 画像、フォント等
-  │
-  └─→ API Gateway (REST API)
-        │
-        └─→ Lambda関数（TypeScript）
-              │
-              ├─→ RDS PostgreSQL (Prisma経由)
-              │     └─ 日報データ、ユーザーデータ
-              │
-              └─→ Cognito（認証・認可）
-```
-
-## 参考リソース
-
-### AWS公式
-
-- [AWS Lambda ドキュメント](https://docs.aws.amazon.com/lambda/)
-- [Amazon API Gateway ドキュメント](https://docs.aws.amazon.com/apigateway/)
-- [AWS CDK ドキュメント](https://docs.aws.amazon.com/cdk/)
-- [AWS Skill Builder（無料学習）](https://aws.amazon.com/training/)
-
-### LocalStack
-
-- [LocalStack公式ドキュメント](https://docs.localstack.cloud/)
-- [LocalStack GitHub](https://github.com/localstack/localstack)
-- [awslocal CLI](https://github.com/localstack/awscli-local)
-
-### Next.js
-
-- [Next.js 公式ドキュメント](https://nextjs.org/docs)
-- [Next.js Static Export](https://nextjs.org/docs/app/building-your-application/deploying/static-exports)
-
-### データベース・ORM
-
-- [Prisma ドキュメント](https://www.prisma.io/docs)
-- [Prisma + PostgreSQL ガイド](https://www.prisma.io/docs/orm/overview/databases/postgresql)
+---
 
 ## ライセンス
 

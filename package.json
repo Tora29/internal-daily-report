@@ -11,9 +11,17 @@
     "format:check": "prettier --check .",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "db:push": "prisma db push",
+    "db:seed": "prisma db seed",
+    "db:reset": "prisma db push --force-reset && prisma db seed",
+    "db:studio": "prisma studio"
+  },
+  "prisma": {
+    "seed": "npx tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@prisma/client": "^6.19.2",
     "next": "16.0.1",
     "react": "19.2.0",
     "react-dom": "19.2.0",
@@ -34,7 +42,9 @@
     "eslint-config-prettier": "^10.1.8",
     "jsdom": "^27.1.0",
     "prettier": "^3.6.2",
+    "prisma": "^6.19.2",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5",
     "vitest": "^4.0.6"
   },
