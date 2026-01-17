@@ -1,0 +1,657 @@
+<!doctype html>
+<html lang="ja" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>初心者ガイド - Daily Report</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5.4.2/daisyui.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      pre {
+        background: #1e1e1e;
+        color: #d4d4d4;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+      }
+      code {
+        font-family: 'Consolas', 'Monaco', monospace;
+      }
+      .code-keyword {
+        color: #569cd6;
+      }
+      .code-string {
+        color: #ce9178;
+      }
+      .code-comment {
+        color: #6a9955;
+      }
+      .code-function {
+        color: #dcdcaa;
+      }
+    </style>
+  </head>
+  <body class="bg-base-100 min-h-screen">
+    <!-- ヘッダー -->
+    <div class="navbar bg-primary text-primary-content sticky top-0 z-50">
+      <div class="container mx-auto">
+        <span class="text-xl font-bold">初心者ガイド</span>
+      </div>
+    </div>
+
+    <div class="container mx-auto p-4 max-w-4xl">
+      <!-- イントロ -->
+      <div class="hero bg-base-200 rounded-lg my-6">
+        <div class="hero-content text-center">
+          <div>
+            <h1 class="text-3xl font-bold">Daily Report 開発ガイド</h1>
+            <p class="py-4">
+              このガイドを読めば、日報システムの開発ができるようになります！
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 目次 -->
+      <div class="card bg-base-200 mb-6">
+        <div class="card-body">
+          <h2 class="card-title">目次</h2>
+          <ul class="menu">
+            <li><a href="#samples">1. サンプルファイルの使い方</a></li>
+            <li><a href="#daisyui">2. DaisyUI の使い方</a></li>
+            <li><a href="#actions">3. Server Actions の使い方</a></li>
+            <li>
+              <a href="#client-server"
+                >4. 'use client' と 'use server' の違い</a
+              >
+            </li>
+            <li><a href="#errors">5. よくあるエラーと対処法</a></li>
+            <li><a href="#tips">6. 開発のコツ</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 1. サンプルファイル -->
+      <section id="samples" class="mb-12">
+        <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+          <span class="badge badge-primary badge-lg">1</span>
+          サンプルファイルの使い方
+        </h2>
+
+        <div class="alert alert-info mb-4">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            class="stroke-current shrink-0 w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          <span
+            >サンプルファイルを
+            <strong>コピーして改造</strong> するのが一番簡単！</span
+          >
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="table table-zebra">
+            <thead>
+              <tr>
+                <th>ファイル</th>
+                <th>説明</th>
+                <th>使い方</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <code class="text-primary">app/user-sample/page.tsx</code>
+                </td>
+                <td>ユーザー一覧ページ</td>
+                <td>データ取得 → 表示の基本パターン</td>
+              </tr>
+              <tr>
+                <td>
+                  <code class="text-primary">app/daisy-ui-sample/page.tsx</code>
+                </td>
+                <td>UIコンポーネント集</td>
+                <td>ボタン、カード、フォーム等のコピペ元</td>
+              </tr>
+              <tr>
+                <td><code class="text-primary">app/actions/sample.ts</code></td>
+                <td>Server Actions のサンプル</td>
+                <td>データ取得・保存の関数例</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card bg-base-200 mt-4">
+          <div class="card-body">
+            <h3 class="card-title text-lg">新しいページを作る手順</h3>
+            <ol class="steps steps-vertical">
+              <li class="step step-primary">
+                <div class="text-left">
+                  <code>app/</code> の下にフォルダを作る<br />
+                  <span class="text-sm opacity-60"
+                    >例: <code>app/reports/</code></span
+                  >
+                </div>
+              </li>
+              <li class="step step-primary">
+                <div class="text-left">
+                  <code>page.tsx</code> ファイルを作る<br />
+                  <span class="text-sm opacity-60"
+                    >例: <code>app/reports/page.tsx</code></span
+                  >
+                </div>
+              </li>
+              <li class="step step-primary">
+                <div class="text-left">サンプルからコピペして改造</div>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. DaisyUI -->
+      <section id="daisyui" class="mb-12">
+        <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+          <span class="badge badge-primary badge-lg">2</span>
+          DaisyUI の使い方
+        </h2>
+
+        <p class="mb-4">
+          DaisyUI は、クラス名を書くだけでキレイなUIが作れるライブラリです。
+        </p>
+
+        <!-- ボタン -->
+        <div class="card bg-base-200 mb-4">
+          <div class="card-body">
+            <h3 class="card-title">ボタン</h3>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <button class="btn">デフォルト</button>
+              <button class="btn btn-primary">プライマリ</button>
+              <button class="btn btn-secondary">セカンダリ</button>
+              <button class="btn btn-ghost">ゴースト</button>
+            </div>
+            <pre><code>&lt;button class="<span class="code-string">btn</span>"&gt;デフォルト&lt;/button&gt;
+&lt;button class="<span class="code-string">btn btn-primary</span>"&gt;プライマリ&lt;/button&gt;
+&lt;button class="<span class="code-string">btn btn-secondary</span>"&gt;セカンダリ&lt;/button&gt;
+&lt;button class="<span class="code-string">btn btn-ghost</span>"&gt;ゴースト&lt;/button&gt;</code></pre>
+          </div>
+        </div>
+
+        <!-- カード -->
+        <div class="card bg-base-200 mb-4">
+          <div class="card-body">
+            <h3 class="card-title">カード</h3>
+            <div class="card bg-base-100 shadow-md w-64 mb-4">
+              <div class="card-body">
+                <h2 class="card-title">タイトル</h2>
+                <p>カードの内容</p>
+                <div class="card-actions justify-end">
+                  <button class="btn btn-primary btn-sm">詳細</button>
+                </div>
+              </div>
+            </div>
+            <pre><code>&lt;div class="<span class="code-string">card bg-base-200</span>"&gt;
+  &lt;div class="<span class="code-string">card-body</span>"&gt;
+    &lt;h2 class="<span class="code-string">card-title</span>"&gt;タイトル&lt;/h2&gt;
+    &lt;p&gt;カードの内容&lt;/p&gt;
+    &lt;div class="<span class="code-string">card-actions justify-end</span>"&gt;
+      &lt;button class="btn btn-primary btn-sm"&gt;詳細&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+        </div>
+
+        <!-- フォーム -->
+        <div class="card bg-base-200 mb-4">
+          <div class="card-body">
+            <h3 class="card-title">フォーム</h3>
+            <div class="flex flex-col gap-2 w-64 mb-4">
+              <input
+                type="text"
+                placeholder="テキスト入力"
+                class="input input-bordered"
+              />
+              <textarea
+                class="textarea textarea-bordered"
+                placeholder="テキストエリア"
+              ></textarea>
+              <select class="select select-bordered">
+                <option>選択肢1</option>
+                <option>選択肢2</option>
+              </select>
+            </div>
+            <pre><code>&lt;input class="<span class="code-string">input input-bordered</span>" placeholder="テキスト" /&gt;
+&lt;textarea class="<span class="code-string">textarea textarea-bordered</span>"&gt;&lt;/textarea&gt;
+&lt;select class="<span class="code-string">select select-bordered</span>"&gt;
+  &lt;option&gt;選択肢&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+          </div>
+        </div>
+
+        <!-- アラート -->
+        <div class="card bg-base-200 mb-4">
+          <div class="card-body">
+            <h3 class="card-title">アラート</h3>
+            <div class="flex flex-col gap-2 mb-4">
+              <div class="alert alert-info"><span>情報メッセージ</span></div>
+              <div class="alert alert-success"><span>成功メッセージ</span></div>
+              <div class="alert alert-warning"><span>警告メッセージ</span></div>
+              <div class="alert alert-error"><span>エラーメッセージ</span></div>
+            </div>
+            <pre><code>&lt;div class="<span class="code-string">alert alert-info</span>"&gt;情報&lt;/div&gt;
+&lt;div class="<span class="code-string">alert alert-success</span>"&gt;成功&lt;/div&gt;
+&lt;div class="<span class="code-string">alert alert-warning</span>"&gt;警告&lt;/div&gt;
+&lt;div class="<span class="code-string">alert alert-error</span>"&gt;エラー&lt;/div&gt;</code></pre>
+          </div>
+        </div>
+
+        <!-- バッジ -->
+        <div class="card bg-base-200 mb-4">
+          <div class="card-body">
+            <h3 class="card-title">バッジ</h3>
+            <div class="flex gap-2 mb-4">
+              <span class="badge">デフォルト</span>
+              <span class="badge badge-primary">プライマリ</span>
+              <span class="badge badge-secondary">セカンダリ</span>
+            </div>
+            <pre><code>&lt;span class="<span class="code-string">badge</span>"&gt;デフォルト&lt;/span&gt;
+&lt;span class="<span class="code-string">badge badge-primary</span>"&gt;プライマリ&lt;/span&gt;</code></pre>
+          </div>
+        </div>
+
+        <!-- ローディング -->
+        <div class="card bg-base-200 mb-4">
+          <div class="card-body">
+            <h3 class="card-title">ローディング</h3>
+            <div class="flex gap-4 mb-4">
+              <span class="loading loading-spinner"></span>
+              <span class="loading loading-dots"></span>
+              <span class="loading loading-ring"></span>
+            </div>
+            <pre><code>&lt;span class="<span class="code-string">loading loading-spinner</span>"&gt;&lt;/span&gt;
+&lt;span class="<span class="code-string">loading loading-dots</span>"&gt;&lt;/span&gt;</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Server Actions -->
+      <section id="actions" class="mb-12">
+        <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+          <span class="badge badge-primary badge-lg">3</span>
+          Server Actions の使い方
+        </h2>
+
+        <div class="alert alert-success mb-4">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="stroke-current shrink-0 h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <span
+            >Server Actions =
+            <strong>サーバーで動く関数</strong
+            >。データベースにアクセスできる！</span
+          >
+        </div>
+
+        <div class="card bg-base-200 mb-4">
+          <div class="card-body">
+            <h3 class="card-title">1. 関数を import する</h3>
+            <pre><code><span class="code-keyword">import</span> { getReports, createReport } <span class="code-keyword">from</span> <span class="code-string">'@/app/actions/report'</span>;</code></pre>
+          </div>
+        </div>
+
+        <div class="card bg-base-200 mb-4">
+          <div class="card-body">
+            <h3 class="card-title">2. 関数を呼び出す</h3>
+            <pre><code><span class="code-comment">// データを取得</span>
+<span class="code-keyword">const</span> reports = <span class="code-keyword">await</span> <span class="code-function">getReports</span>();
+
+<span class="code-comment">// データを作成</span>
+<span class="code-keyword">const</span> result = <span class="code-keyword">await</span> <span class="code-function">createReport</span>(<span class="code-string">'今日の日報...'</span>);
+
+<span class="code-keyword">if</span> (result.success) {
+  <span class="code-comment">// 成功</span>
+} <span class="code-keyword">else</span> {
+  <span class="code-comment">// エラー: result.error</span>
+}</code></pre>
+          </div>
+        </div>
+
+        <div class="card bg-base-200 mb-4">
+          <div class="card-body">
+            <h3 class="card-title">用意されている関数一覧</h3>
+            <div class="overflow-x-auto">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>関数名</th>
+                    <th>説明</th>
+                    <th>戻り値</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>getReports()</code></td>
+                    <td>全日報を取得</td>
+                    <td>日報の配列</td>
+                  </tr>
+                  <tr>
+                    <td><code>getMyReports()</code></td>
+                    <td>自分の日報を取得</td>
+                    <td>日報の配列</td>
+                  </tr>
+                  <tr>
+                    <td><code>getReport(id)</code></td>
+                    <td>1件の日報を取得</td>
+                    <td>日報 or null</td>
+                  </tr>
+                  <tr>
+                    <td><code>createReport(content)</code></td>
+                    <td>日報を作成</td>
+                    <td>{ success, report?, error? }</td>
+                  </tr>
+                  <tr>
+                    <td><code>updateReport(id, content)</code></td>
+                    <td>日報を更新</td>
+                    <td>{ success, report?, error? }</td>
+                  </tr>
+                  <tr>
+                    <td><code>deleteReport(id)</code></td>
+                    <td>日報を削除</td>
+                    <td>{ success, error? }</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. use client と use server -->
+      <section id="client-server" class="mb-12">
+        <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+          <span class="badge badge-primary badge-lg">4</span>
+          'use client' と 'use server' の違い
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-4 mb-4">
+          <div class="card bg-blue-50 border-2 border-blue-200">
+            <div class="card-body">
+              <h3 class="card-title text-blue-600">'use client'</h3>
+              <p class="font-bold">ブラウザで動く</p>
+              <ul class="list-disc list-inside text-sm">
+                <li>useState が使える</li>
+                <li>onClick が使える</li>
+                <li>フォームが作れる</li>
+              </ul>
+              <div class="divider">使う場面</div>
+              <ul class="list-disc list-inside text-sm">
+                <li>フォーム入力</li>
+                <li>ボタンクリック</li>
+                <li>状態の変化</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card bg-green-50 border-2 border-green-200">
+            <div class="card-body">
+              <h3 class="card-title text-green-600">'use server' / なし</h3>
+              <p class="font-bold">サーバーで動く</p>
+              <ul class="list-disc list-inside text-sm">
+                <li>await が直接使える</li>
+                <li>DB にアクセスできる</li>
+                <li>高速に表示</li>
+              </ul>
+              <div class="divider">使う場面</div>
+              <ul class="list-disc list-inside text-sm">
+                <li>データ表示だけ</li>
+                <li>一覧ページ</li>
+                <li>詳細ページ</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="card bg-base-200 mb-4">
+          <div class="card-body">
+            <h3 class="card-title">判断フローチャート</h3>
+            <div class="text-center py-4">
+              <div class="badge badge-lg mb-2">
+                フォームや useState を使う？
+              </div>
+              <div class="flex justify-center gap-8 mt-2">
+                <div class="text-center">
+                  <div class="text-2xl">⬇️ Yes</div>
+                  <div class="badge badge-primary badge-lg mt-2">
+                    'use client' を書く
+                  </div>
+                </div>
+                <div class="text-center">
+                  <div class="text-2xl">⬇️ No</div>
+                  <div class="badge badge-success badge-lg mt-2">
+                    何も書かない
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card bg-base-200 mb-4">
+          <div class="card-body">
+            <h3 class="card-title">コード例: 'use client' が必要</h3>
+            <pre><code><span class="code-string">'use client'</span>;  <span class="code-comment">// ← これを書く！</span>
+
+<span class="code-keyword">import</span> { useState } <span class="code-keyword">from</span> <span class="code-string">'react'</span>;
+
+<span class="code-keyword">export default function</span> <span class="code-function">FormPage</span>() {
+  <span class="code-keyword">const</span> [text, setText] = <span class="code-function">useState</span>(<span class="code-string">''</span>);
+
+  <span class="code-keyword">return</span> (
+    &lt;input
+      value={text}
+      onChange={(e) =&gt; setText(e.target.value)}
+    /&gt;
+  );
+}</code></pre>
+          </div>
+        </div>
+
+        <div class="card bg-base-200 mb-4">
+          <div class="card-body">
+            <h3 class="card-title">コード例: 'use client' が不要</h3>
+            <pre><code><span class="code-comment">// 何も書かない！</span>
+
+<span class="code-keyword">import</span> { getReports } <span class="code-keyword">from</span> <span class="code-string">'@/app/actions/report'</span>;
+
+<span class="code-keyword">export default async function</span> <span class="code-function">ListPage</span>() {
+  <span class="code-keyword">const</span> reports = <span class="code-keyword">await</span> <span class="code-function">getReports</span>();
+
+  <span class="code-keyword">return</span> (
+    &lt;div&gt;
+      {reports.map((r) =&gt; &lt;p key={r.id}&gt;{r.content}&lt;/p&gt;)}
+    &lt;/div&gt;
+  );
+}</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. よくあるエラー -->
+      <section id="errors" class="mb-12">
+        <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+          <span class="badge badge-primary badge-lg">5</span>
+          よくあるエラーと対処法
+        </h2>
+
+        <div class="collapse collapse-plus bg-base-200 mb-2">
+          <input type="radio" name="errors-accordion" />
+          <div class="collapse-title font-medium">
+            <span class="text-error">Error:</span> useState is not defined
+          </div>
+          <div class="collapse-content">
+            <p class="font-bold">原因: 'use client' を書き忘れている</p>
+            <p class="mt-2">対処法: ファイルの一番上に追加</p>
+            <pre
+              class="mt-2"
+            ><code><span class="code-string">'use client'</span>;  <span class="code-comment">// ← これを追加！</span></code></pre>
+          </div>
+        </div>
+
+        <div class="collapse collapse-plus bg-base-200 mb-2">
+          <input type="radio" name="errors-accordion" />
+          <div class="collapse-title font-medium">
+            <span class="text-error">Error:</span> 404 - This page could not be
+            found
+          </div>
+          <div class="collapse-content">
+            <p class="font-bold">原因: ファイル名が違う</p>
+            <p class="mt-2">
+              対処法: ファイル名を <code>page.tsx</code> にする
+            </p>
+            <pre
+              class="mt-2"
+            ><code><span class="code-comment">正しい:</span> app/reports/page.tsx
+<span class="code-comment">間違い:</span> app/reports.tsx
+<span class="code-comment">間違い:</span> app/reports/index.tsx</code></pre>
+          </div>
+        </div>
+
+        <div class="collapse collapse-plus bg-base-200 mb-2">
+          <input type="radio" name="errors-accordion" />
+          <div class="collapse-title font-medium">
+            <span class="text-error">Error:</span> Each child should have a
+            unique "key" prop
+          </div>
+          <div class="collapse-content">
+            <p class="font-bold">原因: map で key を設定していない</p>
+            <p class="mt-2">対処法: key を追加</p>
+            <pre
+              class="mt-2"
+            ><code><span class="code-comment">// key を追加する</span>
+{items.map((item) =&gt; (
+  &lt;div <span class="code-keyword">key={item.id}</span>&gt;{item.name}&lt;/div&gt;
+))}</code></pre>
+          </div>
+        </div>
+
+        <div class="collapse collapse-plus bg-base-200 mb-2">
+          <input type="radio" name="errors-accordion" />
+          <div class="collapse-title font-medium">
+            <span class="text-error">Error:</span> Cannot read properties of
+            undefined
+          </div>
+          <div class="collapse-content">
+            <p class="font-bold">原因: データが null や undefined</p>
+            <p class="mt-2">対処法: オプショナルチェイニングを使う</p>
+            <pre
+              class="mt-2"
+            ><code><span class="code-comment">// ?. を使う</span>
+{user?.name}
+{report?.content}</code></pre>
+          </div>
+        </div>
+
+        <div class="collapse collapse-plus bg-base-200 mb-2">
+          <input type="radio" name="errors-accordion" />
+          <div class="collapse-title font-medium">
+            画面が更新されない / 古いデータが表示される
+          </div>
+          <div class="collapse-content">
+            <p class="font-bold">原因: キャッシュが残っている</p>
+            <p class="mt-2">対処法: キャッシュを削除して再起動</p>
+            <pre class="mt-2"><code>rm -rf .next
+npm run dev</code></pre>
+          </div>
+        </div>
+
+        <div class="collapse collapse-plus bg-base-200 mb-2">
+          <input type="radio" name="errors-accordion" />
+          <div class="collapse-title font-medium">
+            <span class="text-error">Error:</span> Type 'X' is not assignable to
+            type 'Y'
+          </div>
+          <div class="collapse-content">
+            <p class="font-bold">原因: TypeScript の型エラー</p>
+            <p class="mt-2">対処法（緊急用）: 一旦スキップ</p>
+            <pre
+              class="mt-2"
+            ><code><span class="code-comment">// @ts-ignore</span>
+const data = await getData();</code></pre>
+            <p class="mt-2 text-sm opacity-60">※ 後でリーダーに相談してね</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. 開発のコツ -->
+      <section id="tips" class="mb-12">
+        <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+          <span class="badge badge-primary badge-lg">6</span>
+          開発のコツ
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="card bg-base-200">
+            <div class="card-body">
+              <h3 class="card-title text-lg">💡 コピペから始める</h3>
+              <p>ゼロから書かない。サンプルをコピーして改造する。</p>
+            </div>
+          </div>
+
+          <div class="card bg-base-200">
+            <div class="card-body">
+              <h3 class="card-title text-lg">🔄 こまめに確認</h3>
+              <p>少し書いたらブラウザで確認。大きく書いてから確認しない。</p>
+            </div>
+          </div>
+
+          <div class="card bg-base-200">
+            <div class="card-body">
+              <h3 class="card-title text-lg">🆘 すぐ聞く</h3>
+              <p>10分悩んだら聞く。悩む時間がもったいない。</p>
+            </div>
+          </div>
+
+          <div class="card bg-base-200">
+            <div class="card-body">
+              <h3 class="card-title text-lg">✅ 60%でOK</h3>
+              <p>完璧を目指さない。動けばOK。後で直せる。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- フッター -->
+      <footer
+        class="footer footer-center p-4 bg-base-200 text-base-content rounded-lg"
+      >
+        <div>
+          <p>困ったらリーダーに聞いてね！</p>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -107,6 +107,93 @@ http://localhost:3000 にアクセス
 
 ---
 
+## 開発ガイド
+
+### お手本
+
+| 種類           | 説明                               | ファイル                       |
+| -------------- | ---------------------------------- | ------------------------------ |
+| ページ         | ユーザー一覧（データ取得のお手本） | `app/user-sample/page.tsx`     |
+| ページ         | DaisyUI コンポーネント集           | `app/daisy-ui-sample/page.tsx` |
+| Server Actions | 様々なパターンのサンプル           | `app/actions/sample.ts`        |
+
+**コードをコピーして改造してください！**
+
+### 用意されている関数
+
+`app/actions/report.ts` に日報操作の関数が用意されています。**これを呼ぶだけでDBアクセスできます！**
+
+```typescript
+// 日報一覧を取得
+import { getReports } from '@/app/actions/report';
+const reports = await getReports();
+
+// 自分の日報だけ取得
+import { getMyReports } from '@/app/actions/report';
+const myReports = await getMyReports();
+
+// 日報を1件取得
+import { getReport } from '@/app/actions/report';
+const report = await getReport('日報のID');
+
+// 日報を作成
+import { createReport } from '@/app/actions/report';
+const result = await createReport('今日の内容...');
+if (result.success) {
+  // 成功: result.report に作成した日報
+} else {
+  // エラー: result.error にメッセージ
+}
+
+// 日報を更新
+import { updateReport } from '@/app/actions/report';
+const result = await updateReport('日報のID', '更新した内容');
+
+// 日報を削除
+import { deleteReport } from '@/app/actions/report';
+const result = await deleteReport('日報のID');
+```
+
+### ページの作り方
+
+1. `app/` の下にフォルダを作る（例: `app/reports/`）
+2. `page.tsx` ファイルを作る
+3. 関数を import して使う
+
+**例: 日報一覧ページ** (`app/reports/page.tsx`)
+
+```typescript
+import { getReports } from '@/app/actions/report';
+
+export default async function ReportsPage() {
+  const reports = await getReports();
+
+  return (
+    <div>
+      {reports.map((report) => (
+        <div key={report.id} className="card bg-base-200 mb-4 p-4">
+          <p>{report.user.name}</p>
+          <p>{report.content}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+### `'use client'` って何？
+
+- **フォームや useState を使うとき** → 先頭に `'use client'` を書く
+- **データ表示だけ** → `'use client'` は不要
+
+### DaisyUI の使い方
+
+- `app/daisy-ui-sample/page.tsx` を見てコピペ
+- `btn`, `card`, `alert` などのクラスを使う
+- 公式: https://daisyui.com/components/
+
+---
+
 ## 開発フロー
 
 ### ブランチ戦略
@@ -257,11 +344,16 @@ await prisma.report.create({
 ```
 /
 ├── app/                    # Next.js App Router
-│   ├── actions/           # Server Actions
-│   │   └── auth.ts        # loginAs()
+│   ├── actions/           # Server Actions（用意済み）
+│   │   ├── auth.ts        # loginAs()
+│   │   ├── report.ts      # 日報CRUD（getReports, createReport等）
+│   │   └── sample.ts      # サンプルコード集（コピーして使う）
+│   ├── user-sample/page.tsx      # お手本ページ（コピーして使う）
+│   ├── daisy-ui-sample/page.tsx  # DaisyUIサンプル
 │   ├── layout.tsx         # ルートレイアウト
 │   └── page.tsx           # トップページ
 ├── components/            # UIコンポーネント
+│   ├── Navbar.tsx         # ナビゲーション
 │   └── DebugUserSwitcher.tsx
 ├── lib/                   # ユーティリティ
 │   ├── auth.ts            # getCurrentUser()
