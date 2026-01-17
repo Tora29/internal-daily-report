@@ -8,18 +8,18 @@ const prisma = new PrismaClient();
 // ===================================
 
 // --- Team A ---
-const users = [
-  { id: 'tora', name: 'とら', role: 'admin' },
-  { id: 'kyu', name: 'きゅー', role: 'member' },
-  { id: 'shun', name: 'しゅん', role: 'member' },
-];
+// const users = [
+//   { id: 'tora', name: 'とら', role: 'admin' },
+//   { id: 'kyu', name: 'きゅー', role: 'member' },
+//   { id: 'shun', name: 'しゅん', role: 'member' },
+// ];
 
 // --- Team B ---
-// const users = [
-//   { id: 'ika', name: 'いか', role: 'admin' },
-//   { id: 'moke', name: 'もけ', role: 'member' },
-//   { id: 'kiko', name: 'きこ', role: 'member' },
-// ];
+const users = [
+  { id: 'ika', name: 'いか', role: 'admin' },
+  { id: 'moke', name: 'もけ', role: 'member' },
+  { id: 'kiko', name: 'きこ', role: 'member' },
+];
 
 // ===================================
 // サンプル日報（各チームで編集してください）
