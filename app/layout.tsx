@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
+import { Navbar } from '@/components/Navbar';
 import { DebugUserSwitcher } from '@/components/DebugUserSwitcher';
 import { getCurrentUser } from '@/lib/auth';
 
@@ -29,9 +30,10 @@ export default async function RootLayout({
   return (
     <html lang="ja">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}
       >
-        {children}
+        <Navbar />
+        <main>{children}</main>
         <DebugUserSwitcher currentUserId={user?.id} />
       </body>
     </html>
