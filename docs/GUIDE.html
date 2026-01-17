@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>初心者ガイド - Daily Report</title>
+    <title>開発ガイド - Daily Report</title>
     <link
       href="https://cdn.jsdelivr.net/npm/daisyui@5.4.2/daisyui.css"
       rel="stylesheet"
@@ -38,7 +38,7 @@
     <!-- ヘッダー -->
     <div class="navbar bg-primary text-primary-content sticky top-0 z-50">
       <div class="container mx-auto">
-        <span class="text-xl font-bold">初心者ガイド</span>
+        <span class="text-xl font-bold">開発ガイド</span>
       </div>
     </div>
 
@@ -507,80 +507,62 @@
           よくあるエラーと対処法
         </h2>
 
-        <div class="collapse collapse-plus bg-base-200 mb-2">
-          <input type="radio" name="errors-accordion" />
-          <div class="collapse-title font-medium">
-            <span class="text-error">Error:</span> useState is not defined
-          </div>
-          <div class="collapse-content">
+        <div class="card bg-base-200 mb-3">
+          <div class="card-body">
+            <h3 class="card-title text-base">
+              <span class="text-error">Error:</span> useState is not defined
+            </h3>
             <p class="font-bold">原因: 'use client' を書き忘れている</p>
             <p class="mt-2">対処法: ファイルの一番上に追加</p>
-            <pre
-              class="mt-2"
-            ><code><span class="code-string">'use client'</span>;  <span class="code-comment">// ← これを追加！</span></code></pre>
+            <pre class="mt-2"><code><span class="code-string">'use client'</span>;  <span class="code-comment">// ← これを追加！</span></code></pre>
           </div>
         </div>
 
-        <div class="collapse collapse-plus bg-base-200 mb-2">
-          <input type="radio" name="errors-accordion" />
-          <div class="collapse-title font-medium">
-            <span class="text-error">Error:</span> 404 - This page could not be
-            found
-          </div>
-          <div class="collapse-content">
+        <div class="card bg-base-200 mb-3">
+          <div class="card-body">
+            <h3 class="card-title text-base">
+              <span class="text-error">Error:</span> 404 - This page could not be found
+            </h3>
             <p class="font-bold">原因: ファイル名が違う</p>
-            <p class="mt-2">
-              対処法: ファイル名を <code>page.tsx</code> にする
-            </p>
-            <pre
-              class="mt-2"
-            ><code><span class="code-comment">正しい:</span> app/reports/page.tsx
+            <p class="mt-2">対処法: ファイル名を <code>page.tsx</code> にする</p>
+            <pre class="mt-2"><code><span class="code-comment">正しい:</span> app/reports/page.tsx
 <span class="code-comment">間違い:</span> app/reports.tsx
 <span class="code-comment">間違い:</span> app/reports/index.tsx</code></pre>
           </div>
         </div>
 
-        <div class="collapse collapse-plus bg-base-200 mb-2">
-          <input type="radio" name="errors-accordion" />
-          <div class="collapse-title font-medium">
-            <span class="text-error">Error:</span> Each child should have a
-            unique "key" prop
-          </div>
-          <div class="collapse-content">
+        <div class="card bg-base-200 mb-3">
+          <div class="card-body">
+            <h3 class="card-title text-base">
+              <span class="text-error">Error:</span> Each child should have a unique "key" prop
+            </h3>
             <p class="font-bold">原因: map で key を設定していない</p>
             <p class="mt-2">対処法: key を追加</p>
-            <pre
-              class="mt-2"
-            ><code><span class="code-comment">// key を追加する</span>
+            <pre class="mt-2"><code><span class="code-comment">// key を追加する</span>
 {items.map((item) =&gt; (
   &lt;div <span class="code-keyword">key={item.id}</span>&gt;{item.name}&lt;/div&gt;
 ))}</code></pre>
           </div>
         </div>
 
-        <div class="collapse collapse-plus bg-base-200 mb-2">
-          <input type="radio" name="errors-accordion" />
-          <div class="collapse-title font-medium">
-            <span class="text-error">Error:</span> Cannot read properties of
-            undefined
-          </div>
-          <div class="collapse-content">
+        <div class="card bg-base-200 mb-3">
+          <div class="card-body">
+            <h3 class="card-title text-base">
+              <span class="text-error">Error:</span> Cannot read properties of undefined
+            </h3>
             <p class="font-bold">原因: データが null や undefined</p>
             <p class="mt-2">対処法: オプショナルチェイニングを使う</p>
-            <pre
-              class="mt-2"
-            ><code><span class="code-comment">// ?. を使う</span>
+            <pre class="mt-2"><code><span class="code-comment">// ?. を使う</span>
 {user?.name}
 {report?.content}</code></pre>
           </div>
         </div>
 
-        <div class="collapse collapse-plus bg-base-200 mb-2">
-          <input type="radio" name="errors-accordion" />
-          <div class="collapse-title font-medium">
-            画面が更新されない / 古いデータが表示される
-          </div>
-          <div class="collapse-content">
+        <div class="card bg-base-200 mb-3">
+          <div class="card-body">
+            <h3 class="card-title text-base">
+              画面が更新されない / 古いデータが表示される
+            </h3>
             <p class="font-bold">原因: キャッシュが残っている</p>
             <p class="mt-2">対処法: キャッシュを削除して再起動</p>
             <pre class="mt-2"><code>rm -rf .next
@@ -588,18 +570,14 @@ npm run dev</code></pre>
           </div>
         </div>
 
-        <div class="collapse collapse-plus bg-base-200 mb-2">
-          <input type="radio" name="errors-accordion" />
-          <div class="collapse-title font-medium">
-            <span class="text-error">Error:</span> Type 'X' is not assignable to
-            type 'Y'
-          </div>
-          <div class="collapse-content">
+        <div class="card bg-base-200 mb-3">
+          <div class="card-body">
+            <h3 class="card-title text-base">
+              <span class="text-error">Error:</span> Type 'X' is not assignable to type 'Y'
+            </h3>
             <p class="font-bold">原因: TypeScript の型エラー</p>
             <p class="mt-2">対処法（緊急用）: 一旦スキップ</p>
-            <pre
-              class="mt-2"
-            ><code><span class="code-comment">// @ts-ignore</span>
+            <pre class="mt-2"><code><span class="code-comment">// @ts-ignore</span>
 const data = await getData();</code></pre>
             <p class="mt-2 text-sm opacity-60">※ 後でリーダーに相談してね</p>
           </div>
