@@ -1,15 +1,10 @@
 // ===================================
-// サンプルページ: ユーザー一覧
-// このページをコピーして改造してください
+// 日報一覧ページ
 // ===================================
 
-// Server Actions から関数を import
 import { getReports } from '@/app/actions/report';
 
-// Server Component なので 'use client' は不要
-// 直接 await でデータを取得できる
 export default async function DailyListPage() {
-  // Server Actions の関数を呼ぶだけ！
   const reports = await getReports();
 
   return (
