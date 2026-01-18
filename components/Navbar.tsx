@@ -17,13 +17,11 @@ export function Navbar() {
 
       {/* ナビゲーションリンク（右側） */}
       <div className="flex-none gap-2">
-        <Link href="/user-sample" className="btn btn-ghost btn-sm">
-          データ取得
-        </Link>
-        <Link href="/daisy-ui-sample" className="btn btn-ghost btn-sm">
-          UIサンプル
+        <Link href="/daily-list/register" className="btn btn-ghost btn-sm">
+          登録
         </Link>
       </div>
     </div>
+    
   );
 }
