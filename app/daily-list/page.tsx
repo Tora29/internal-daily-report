@@ -3,6 +3,7 @@
 // ===================================
 
 import { getReports } from '@/app/actions/report';
+import DeleteReportButton from '@/components/DeleteReportButton';
 
 // 非同期でデータ取得
 export default async function DailyListPage() {
@@ -28,7 +29,7 @@ export default async function DailyListPage() {
               <td>{report.content}</td>
               <td className="flex gap-2">
                 <button className="btn btn-primary btn-md">編集</button>
-                <button className="btn btn-error btn-md">削除</button>
+                <DeleteReportButton reportId={report.id} />
               </td>
             </tr>
           ))}
