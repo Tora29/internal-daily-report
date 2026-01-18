@@ -4,7 +4,9 @@
 
 import { getReports } from '@/app/actions/report';
 
+// 非同期でデータ取得
 export default async function DailyListPage() {
+  // 日報一覧取得
   const reports = await getReports();
 
   return (
