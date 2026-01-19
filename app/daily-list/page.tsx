@@ -4,6 +4,7 @@
 
 import Link from 'next/link';
 import { getReports } from '@/app/actions/report';
+import DeleteReportButton from '@/components/DeleteReportButton';
 
 // 非同期でデータ取得
 export default async function DailyListPage() {
@@ -28,12 +29,13 @@ export default async function DailyListPage() {
               <td>{report.userId}</td>
               <td>{report.content}</td>
               <td className="flex gap-2">
-                <Link href={`/daily-list/${report.id}/edit`}>
-                  <button type="button" className="btn btn-primary btn-md">
-                    編集
-                  </button>
+                <Link
+                  href={`/daily-list/${report.id}/edit`}
+                  className="btn btn-primary btn-md"
+                >
+                編集
                 </Link>
-                <button className="btn btn-error btn-md">削除</button>
+                <DeleteReportButton reportId={report.id} />
               </td>
             </tr>
           ))}
