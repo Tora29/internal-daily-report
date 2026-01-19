@@ -3,6 +3,7 @@
 import { getCurrentUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 // ===================================
 // 日報 CRUD Server Actions
@@ -42,6 +43,10 @@ export async function getMyReports() {
  * 使い方: const report = await getReport('xxx');
  */
 export async function getReport(id: string) {
+  if (!id) {
+    throw new Error('日報IDが指定されていません');
+  }
+
   const report = await prisma.report.findUnique({
     where: { id },
     include: { user: true },
@@ -51,68 +56,79 @@ export async function getReport(id: string) {
 
 /**
  * 日報を作成
- * 使い方: const result = await createReport('今日の内容...');
+ * 使い方: フォームアクションから呼び出す
  */
-export async function createReport(content: string) {
+export async function createReport(formData: FormData) {
   const user = await getCurrentUser();
 
   if (!user) {
-    return { success: false, error: 'ログインしてください' };
+    throw new Error('ログインしてください');
   }
 
-  if (!content.trim()) {
-    return { success: false, error: '内容を入力してください' };
+  const dateStr = formData.get('date') as string;
+  const content = formData.get('content') as string;
+
+  if (!dateStr || !content.trim()) {
+    throw new Error('必須項目を入力してください');
   }
 
   try {
-    const report = await prisma.report.create({
+    await prisma.report.create({
       data: {
         userId: user.id,
         content: content.trim(),
-        date: new Date(),
+        date: new Date(dateStr),
       },
     });
-
-    revalidatePath('/reports');
-    return { success: true, report };
-  } catch {
-    return { success: false, error: '保存に失敗しました' };
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : '不明なエラー';
+    throw new Error(`保存に失敗しました: ${errorMessage}`);
   }
+
+  revalidatePath('/daily-list');
+  redirect('/daily-list');
 }
 
 /**
  * 日報を更新
- * 使い方: const result = await updateReport('xxx', '更新した内容...');
+ * 使い方: フォームアクションから呼び出す
  */
-export async function updateReport(id: string, content: string) {
+export async function updateReport(formData: FormData) {
   const user = await getCurrentUser();
 
   if (!user) {
-    return { success: false, error: 'ログインしてください' };
+    throw new Error('左下のDebug欄からログインしてください');
   }
 
-  if (!content.trim()) {
-    return { success: false, error: '内容を入力してください' };
+  const id = formData.get('id') as string;
+  const dateStr = formData.get('date') as string;
+  const content = formData.get('content') as string;
+
+  if (!id || !dateStr || !content.trim()) {
+    throw new Error('必須項目を入力してください');
   }
 
   // 自分の日報かチェック
   const existing = await prisma.report.findUnique({ where: { id } });
   if (!existing || existing.userId !== user.id) {
-    return { success: false, error: '編集権限がありません' };
+    throw new Error('編集権限がありません');
   }
 
   try {
-    const report = await prisma.report.update({
+    await prisma.report.update({
       where: { id },
-      data: { content: content.trim() },
+      data: {
+        date: new Date(dateStr),
+        content: content.trim(),
+      },
     });
-
-    revalidatePath('/reports');
-    revalidatePath(`/reports/${id}`);
-    return { success: true, report };
-  } catch {
-    return { success: false, error: '更新に失敗しました' };
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : '不明なエラー';
+    throw new Error(`更新に失敗しました: ${errorMessage}`);
   }
+
+  revalidatePath('/daily-list');
+  redirect('/daily-list');
 }
 
 /**

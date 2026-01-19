@@ -2,6 +2,7 @@
 // 日報一覧ページ
 // ===================================
 
+import Link from 'next/link';
 import { getReports } from '@/app/actions/report';
 import DeleteReportButton from '@/components/DeleteReportButton';
 
@@ -28,7 +29,12 @@ export default async function DailyListPage() {
               <td>{report.userId}</td>
               <td>{report.content}</td>
               <td className="flex gap-2">
-                <button className="btn btn-primary btn-md">編集</button>
+                <Link
+                  href={`/daily-list/${report.id}/edit`}
+                  className="btn btn-primary btn-md"
+                >
+                編集
+                </Link>
                 <DeleteReportButton reportId={report.id} />
               </td>
             </tr>
