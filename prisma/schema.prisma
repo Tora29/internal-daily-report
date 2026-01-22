@@ -9,20 +9,32 @@ datasource db {
 }
 
 model User {
-  id        String   @id
+  id        String    @id
   name      String
-  role      String   @default("member")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  role      String    @default("member")
+  createdAt DateTime  @default(now()) @map("created_at") 
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") 
+  deletedAt DateTime? @map("deleted_at") 
   reports   Report[]
 }
 
 model Report {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  date      DateTime @default(now())
+  id        String    @id @default(cuid())
+  userId    String    @map("user_id")
+  date      DateTime  @default(now())
   content   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now()) @map("created_at") 
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") 
+  deletedAt DateTime? @map("deleted_at") 
+  user      User      @relation(fields: [userId], references: [id], map: "Report_userId_fkey")
+}
+
+model Comment {
+  id        BigInt    @id @default(autoincrement())
+  reportId  String    @map("report_id")
+  userId    String    @map("user_id")
+  comment   String
+  createdAt DateTime  @default(now()) @map("created_at") 
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") 
+  deletedAt DateTime? @map("deleted_at") 
 }
